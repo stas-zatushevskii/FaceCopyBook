@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    myprofile
+{% endblock %}
+
+
+{% block content %}
+
+<div class="ui modal mymodal">
+    <i class="close icon"></i>
+    <div class="header">
+      Фотография профиля 
+    </div>
+    <div class="image content">
+      <div class="ui medium image">
+        <img src={{obj.avatar.url}}>
+    </div>
+    <div class="description">
+    <div class="ui header">Информация про вас</div>
+    <form action="" method="POST" class="ui form" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{form.as_p}}
+        </div>
+        </div>
+        <div class="actions">
+        <button type ="submit" class="ui positive right labeled icon button">
+            Обновить
+            <i class="checkmark icon"></i>
+        </button>
+    </form>
+    </div>
+  </div>
+
+<div class="ui segment">
+    {% if is_edit %}
+        <div class="ui pink message">Ваш профифль был отредактирован</div>
+    {% endif %}
+    <h3>мой профиль: {{request.user}}</h3>
+    <div class="ui grid">
+        <div class="row">
+            <div class="six wide column">
+                <img class="ui medium rounded image" src={{obj.avatar.url}}>
+                <div class="row mt-5">
+                    <button class="ui secondary button" id="modal-btn">Обновить ваш профиль</button>
+                </div>
+            </div>
+            <div class="ten wide column">
+                <table class="ui table">
+                    <tbody>
+                        <tr>
+                            <td>username</td>
+                            <td>{{obj.user}}</td>
+                        </tr>
+                        <tr>
+                            <td>имя пользователь</td>
+                            <td>{{obj.first_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>фамилия пользователь</td>
+                            <td>{{obj.last_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>биография</td>
+                            <td>{{obj.bio}}</td>
+                        </tr>
+                        <tr>
+                            <td>количество друзей</td>
+                            <td>{{obj.get_friends_num}}</td>
+                        </tr>
+                        <tr>
+                            <td>количество постов</td>
+                            <td>{{obj.get_posts_num}}</td>
+                        </tr>
+                        <tr>
+                            <td>поставленно лайков</td>
+                            <td>{{obj.get_likes_given}}</td>
+                        </tr>
+                        <tr>
+                            <td>получено лайков</td>
+                            <td>{{obj.get_likes_given}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

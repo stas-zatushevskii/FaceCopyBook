@@ -1,0 +1,60 @@
+{% url "home" as path_to_home%}
+{% url "posts:main-post-view" as path_to_post%}
+{% url "profiles:my_profile" as path_to_my_profile%}
+{% url "profiles:invite-profiles" as path_to_invite_profiles%}
+{% url "profiles:my_profile" as path_to_my_profile%}
+{% url "profiles:my_invites" as path_to_my_invites%}
+{% url "profiles:all-profiles" as path_to_all_posts%}
+
+<div class="ui inverted menu nav mb-7">
+    <div class="ui container">
+      {% if request.user.is_authenticated %}
+      <a href="{{path_to_post}}" class="{% if request.path == path_to_post %} active {% endif %} item">
+        <h3>FaceCopyBook</h3>
+      </a>
+      {% endif %}
+  
+      <div class="right menu">
+          {% if request.user.is_authenticated %}
+          <div class="item">
+              <div class="ui floating dropdown icon button teal"> Друзья
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <a href="{{path_to_all_posts}}" class="{% if request.path == path_to_all_posts %} active {% endif %} item">
+                          Все профили
+                      </a>
+                      <a href="{{path_to_invite_profiles}}" class="{% if request.path == path_to_invite_profiles %} active {% endif %} item">
+                          Отправить приглашения
+                      </a>
+                      <a href="{{path_to_my_invites}}" class="{% if request.path == path_to_my_invites %} active {% endif %} item">
+                          Полученные приглашения &nbsp; <div class="ui purple horizontal label">{{invites_num}}</div>
+                      </a>
+                  </div>
+               </div>
+          </div>
+               <div class="item">
+                <form action="{% url 'posts:post-search' %}" method="GET">
+                  <div class="ui action left icon input">
+                  <input class="prompt" type="text" name='name' placeholder="имя пользователя...">
+                  <i class="search icon"></i>
+                  <button type='submit' class="ui button">Найти</button>
+                  </div>
+              </form>
+              </div>
+          
+              <a href="{{path_to_my_profile}}" class="{% if request.path == path_to_my_profile %} active {% endif %} item">
+                    <img src={{ picture.url }} class="ui avatar image">&nbsp;
+                   {{ request.user }}
+              </a>
+  
+              <a href="{% url "account_logout"%}" class="ui item">
+                  Logout
+              </a>
+          {% else %}
+          <a href="{% url "account_login"%}" class="ui item">
+                  Login
+              </a>
+          {% endif %}
+      </div>
+    </div>
+  </div>

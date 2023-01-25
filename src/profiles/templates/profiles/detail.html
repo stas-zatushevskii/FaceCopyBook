@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    all_profiles
+{% endblock title %}
+
+{% block content %}
+    <div class="ui grid">
+        <div class="row">
+            <div class="four wide column">
+                <img class="ui medium circular image" src={{object.avatar.url}}>
+                <h1>{{object.user}}</h1>
+                <div class="ui vertical fluid menu">
+                    <div class="item">
+                        посты
+                        <div class="ui label">{{ object.get_posts_num }}</div>
+                    </div>
+                    <div class="item">
+                        получено лайков
+                        <div class="ui label">{{ object.get_likes_given }}</div>
+                    </div>
+                    <div class="item">
+                        поставленно лайков
+                        <div class="ui label">{{ object.get_likes_recived }}</div>
+                    </div>
+                    <div class="item">
+                        друзья
+                        <div class="ui label">{{ object.get_friends_num }}</div>
+                    </div>
+                </div>
+                    {% if object.user not in arr_recipient and object.user not in arr_sender %}
+                        <form action="{% url 'profiles:send_invitation' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk", value={{object.pk}}>
+                            <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i> Добавить в друзья</button>
+                        </form>
+                        {% endif %}
+
+                        {% if object.user in arr_recipient and request.user not in object.friends.all %}
+                            <button class="ui disabled button mb-5 w-big"><i class="user icon"></i> Ожидание одобрения</button>
+                        {% endif %}
+
+                        {% if request.user in object.friends.all %}
+                            <form action="{% url 'profiles:delete_friend' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="profile_pk", value={{object.pk}}>
+                                    <button type="submit" class="ui negative basic button mb-5 w-big"><i class="minus square icon"></i> Удалить из друзей</button>
+                            </form>
+                    {% endif %}
+            </div>
+            <div class="twelve wide column">
+                {% if num_posts %}
+                    {% for post in posts%}
+                        <div class="ui segment fluid">
+                            {{post.text}}
+                        </div>
+                    {% endfor%}
+                {% else %}
+                    <h1> У пользователя нет постов </h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

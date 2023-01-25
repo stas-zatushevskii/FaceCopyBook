@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Все профили 
+{% endblock title %}
+
+{% block content %}
+
+    {% if is_empty %}
+        <h1> Нет профилей для взаимодействия </h1>
+    {% endif %}
+
+    {% for profile in object_list %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{profile.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{profile.user}}</h3>
+                        <p>{{profile.bio}}</p>
+                        <a href="{{profile.get_absolute_url}}">
+                            <button class="ui primary button mb-5 w-big">Профиль пользовател</button>
+                        </a>
+        
+                        {% if profile.user not in arr_recipient and profile.user not in arr_sender %}
+                            <form action="{% url 'profiles:send_invitation' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="profile_pk", value={{profile.pk}}>
+                                <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i> Добавить в друзья</button>
+                            </form>
+                        {% endif %}
+
+                        {% if profile.user in arr_recipient and request.user not in profile.friends.all %}
+                            <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Ожидание</button>
+                        {% endif %}
+
+                        {% if request.user in profile.friends.all %}
+                            <form action="{% url 'profiles:delete_friend' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="profile_pk", value={{profile.pk}}>
+                                    <button type="submit" class="ui negative basic button mb-5 w-big"><i class="minus square icon"></i> Удалить из друзей</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}

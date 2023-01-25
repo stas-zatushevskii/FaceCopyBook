@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Not found 
+{% endblock title %}
+
+
+{% block content %}
+<div class="ui grid">
+    <div class="eleven wide column">
+        {% if posts %}
+            {% for post in posts %}
+            <h2> Найденные посты пользователя {{post.author.user}} </h2>
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="right floated meta">
+                    <div class="ui grid">
+                        <div class="row">
+                            {% if request.user == post.author.user %}
+                                <a href="{% url "posts:post-update" post.pk %}"><button class="ui button bwhite-lg ">Обновить</button></a>
+                                <a href="{% url "posts:post-delete" post.pk %}"><button class="ui button bwhite-lg ">Удалить</button></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                        
+                    </div>
+                    <img class="ui avatar image" src={{post.author.avatar.url}}> 
+                    {{ post.author.user }} - {{ post.pub_date|timesince}} ago
+                </div>
+                <div class="ui fluid image">
+                    {% if post.image %}
+                        <img src={{post.image.url}}>
+                    {% endif %}
+                </div>
+                <div class="content">
+                    <p> {{ post.text }} </p>
+                    <div class="right floated">
+                        <form action="{% url 'posts:like-dislike-post-view' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value={{post.id}}>
+                            {% if profile not in post.liked.all %}
+                                <button type="submit" class="ui bwhite-sm button"><i class="thumbs up icon"></i>
+                                </button>
+                                <span> {{post.num_likes}} лайки</span>
+                            {% else %}
+                                <button type="submit" class="ui bwhite-sm button"><i class="thumbs down icon"></i>
+                                </button>
+                                <span> {{post.num_likes}} лайки</span>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <i class="comment icon"></i>
+                    <span> {{ post.num_comments }} коментарии </span>
+                </div>
+                <div class="extra content">
+                    <div class="mb-5">
+                    
+                    </div>
+                    <div class="comment-box">
+                    {% if post.comments.all %}
+                        {% for comment in post.comments.all %}
+                        
+                            <div class="ui segment mb-5">
+                                <img class="ui avatar image" src={{comment.author.avatar.url}}>
+                                <span>{{ comment.author }}</span>
+                                <div class='mt-5'>{{ comment.text }}</div>
+                            </div>
+                        
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+            {% endfor %}
+        {% else %}
+            <h1> Пользователь не найден </h1>
+        {% endif%}
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block scripts %} 
+    <script>
+        $( document ).ready(function() {
+            let display = false
+            $(".cmt_btn").click(function () {
+                if (display===false) {
+                    $(this).next(".comment-box").show("slow");
+                    display=true
+                } else {
+                    $(this).next(".comment-box").hide("slow");
+                    display=false
+                }  
+            });
+        });
+    </script>
+{% endblock scripts %}

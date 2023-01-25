@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Обновить пост
+{% endblock title %}
+
+
+{% block content %}
+    <div class="ui sigment">
+        <h3>Обновить пост</h3>
+        <form action="" method="POST" class="ui form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            <button type="submit" class="ui buttonprimary mt-5"> Обновить </buttun>
+        </form>
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,43 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    мои приглашения
+{% endblock title %}
+
+{% block content %}
+
+    {% if is_empty%}
+        <h1> Приглашения не получены</h1>
+    {% endif %}
+    <ul>
+        {% for obj in qs %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.bio}}</p>
+                        <br>
+                        <a href="{{obj.get_absolute_url}}">
+                            <button class="ui primary button mb-5 w-big">Профиль пользовател</button>
+                        </a>
+                        <form action="{% url "profiles:accept_invites" %}" method="POST">
+                            {%csrf_token%}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui positive basic button mb-5 w-big"><i class="check icon"></i> Принять приглашение</button>
+                        </form>
+                        <form action="{% url "profiles:reject_invites"%} " method="POST">
+                            {%csrf_token%}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui negative basic button mb-5 w-big"><i class="close icon"></i> Отклонить приглашение</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+{% endblock content %}

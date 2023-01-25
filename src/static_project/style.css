@@ -1,0 +1,42 @@
+body {
+    background-color: ivory;
+}
+
+.nav {
+    border-radius: 0px !important;
+    padding: 10px 0 10px 0 !important;
+    background-color: #446cca !important;
+}
+
+.mb7 {
+    margin-bottom: 7px !important;
+}
+
+.mt5 {
+    margin-top: 5px !important;
+}
+
+.mymodal {
+    height: 300px !important;
+}
+
+.mb-5 {
+    margin-bottom: 5px !important;
+}
+
+.w-big {
+    width: 200px !important;
+}
+
+.bwhite-lg {
+    background-color: transparent !important;
+}
+
+.bwhite-sn {
+    background-color: transparent !important;
+    width: 10px !important;
+}
+
+.comment-box {
+    display: none;
+}
